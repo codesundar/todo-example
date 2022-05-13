@@ -5,7 +5,16 @@ import 'package:todoapp/styles/theme-data.dart';
 
 import 'controllers/settings.dart';
 
-void main() {
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'screens/login.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -28,7 +37,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: CustomThemeData().lightTheme,
       darkTheme: CustomThemeData().darkTheme,
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }
