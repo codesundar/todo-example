@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _nameCtrl = TextEditingController();
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _passwordCtrl = TextEditingController();
+  TextEditingController _mobileCtrl = TextEditingController();
 
   register() {
     FirebaseAuth.instance
@@ -23,9 +25,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     )
         .then((value) {
       print("Login Success");
-      Get.to(HomeScreen());
+      insertToFirestore();
+      // Get.to(HomeScreen());
     }).catchError((e) {
       print(e);
+    });
+  }
+
+  insertToFirestore() {
+    FirebaseFirestore.instance.collection("accounts").add({
+      "uid": FirebaseAuth.instance.currentUser!.uid,
+      "displayName": _nameCtrl.text,
+      "email": _emailCtrl.text,
+      "mobile": _mobileCtrl.text,
+      "createdAt": FieldValue.serverTimestamp()
     });
   }
 
@@ -43,6 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           TextField(
             controller: _passwordCtrl,
+          ),
+          TextField(
+            controller: _mobileCtrl,
           ),
           TextButton(
             onPressed: () {

@@ -22,7 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
       email: _emailCtrl.text,
       password: _passwordCtrl.text,
     )
-        .then((value) {
+        .then((res) {
+          print(res);
       print("Login Success");
       Get.to(HomeScreen());
     }).catchError((e) {

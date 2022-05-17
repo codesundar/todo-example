@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todoapp/screens/home.dart';
+import 'package:todoapp/screens/validate.dart';
 import 'package:todoapp/styles/theme-data.dart';
 
 import 'controllers/settings.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: CustomThemeData().lightTheme,
       darkTheme: CustomThemeData().darkTheme,
-      home: LoginScreen(),
+      home: ValidateScreen(),
     );
   }
 }
