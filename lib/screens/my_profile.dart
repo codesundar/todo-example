@@ -13,6 +13,7 @@ class MyProfileScreen extends StatefulWidget {
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
+  var userObj = {};
   TextEditingController _nameCtrl = TextEditingController();
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _mobileCtrl = TextEditingController();
@@ -21,6 +22,41 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     FirebaseAuth.instance.signOut().then((value) {
       Get.offAll(LoginScreen());
     });
+  }
+
+  getUserData() {
+    FirebaseFirestore.instance
+        .collection("accounts")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((res) {
+      setState(
+        () {
+          userObj = {"id": res.id, ...res.data()!};
+          _nameCtrl.text = userObj['displayName'];
+          _emailCtrl.text = userObj['email'];
+          _mobileCtrl.text = userObj['mobile'];
+        },
+      );
+    });
+  }
+
+  updateProfile() {
+    FirebaseFirestore.instance
+        .collection("accounts")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+      "displayName": _nameCtrl.text,
+      "mobile": _mobileCtrl.text,
+      "email": _emailCtrl.text
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
   }
 
   @override
@@ -39,7 +75,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             controller: _mobileCtrl,
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              updateProfile();
+            },
             child: Text("update profile"),
           ),
           TextButton(

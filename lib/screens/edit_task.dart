@@ -14,6 +14,7 @@ class EditTaskScreen extends StatefulWidget {
 }
 
 class _EditTaskScreenState extends State<EditTaskScreen> {
+  late final task;
   final TextEditingController _taskCtrl = TextEditingController();
 
   final TodoController _todoController = Get.put(TodoController());
@@ -22,7 +23,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _taskCtrl.text = widget.task["title"];
+    setState(() {
+      task = widget.task;
+    });
+    _taskCtrl.text = task["title"];
   }
 
   @override
@@ -33,11 +37,23 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       ),
       body: Column(children: [
         TextField(
-          controller: _taskCtrl,
+            controller: _taskCtrl,
+            onChanged: (val) {
+              setState(() {
+                task["title"] = _taskCtrl.text;
+              });
+            }),
+        Switch(
+          value: task["isCompleted"],
+          onChanged: (val) {
+            setState(() {
+              task["isCompleted"] = val;
+            });
+          },
         ),
         ElevatedButton(
           onPressed: () {
-            _todoController.updateTask(widget.task["id"], _taskCtrl.text);
+            _todoController.updateTask(task);
           },
           child: const Text("Update Task"),
         ),

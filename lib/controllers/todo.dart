@@ -20,8 +20,8 @@ class TodoController extends GetxController {
     });
   }
 
-  void updateTask(id, title) {
-    firestore.collection("tasks").doc(id).update({"title": title});
+  void updateTask(task) {
+    firestore.collection("tasks").doc(task['id']).update(task);
     //  firestore.collection("tasks").doc(id).update({
     //   "title": title
     // });

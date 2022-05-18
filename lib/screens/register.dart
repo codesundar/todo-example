@@ -33,7 +33,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   insertToFirestore() {
-    FirebaseFirestore.instance.collection("accounts").add({
+    // FirebaseFirestore.instance.collection("accounts").add({
+    //   "uid": FirebaseAuth.instance.currentUser!.uid,
+    //   "displayName": _nameCtrl.text,
+    //   "email": _emailCtrl.text,
+    //   "mobile": _mobileCtrl.text,
+    //   "createdAt": FieldValue.serverTimestamp()
+    // });
+    var uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance.collection("accounts").doc(uid).set({
       "uid": FirebaseAuth.instance.currentUser!.uid,
       "displayName": _nameCtrl.text,
       "email": _emailCtrl.text,
