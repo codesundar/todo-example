@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:todoapp/controllers/auth.dart';
 import 'package:todoapp/screens/home.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,39 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _passwordCtrl = TextEditingController();
   TextEditingController _mobileCtrl = TextEditingController();
-
-  register() {
-    FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-      email: _emailCtrl.text,
-      password: _passwordCtrl.text,
-    )
-        .then((value) {
-      print("Login Success");
-      insertToFirestore();
-      // Get.to(HomeScreen());
-    }).catchError((e) {
-      print(e);
-    });
-  }
-
-  insertToFirestore() {
-    // FirebaseFirestore.instance.collection("accounts").add({
-    //   "uid": FirebaseAuth.instance.currentUser!.uid,
-    //   "displayName": _nameCtrl.text,
-    //   "email": _emailCtrl.text,
-    //   "mobile": _mobileCtrl.text,
-    //   "createdAt": FieldValue.serverTimestamp()
-    // });
-    var uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore.instance.collection("accounts").doc(uid).set({
-      "uid": FirebaseAuth.instance.currentUser!.uid,
-      "displayName": _nameCtrl.text,
-      "email": _emailCtrl.text,
-      "mobile": _mobileCtrl.text,
-      "createdAt": FieldValue.serverTimestamp()
-    });
-  }
+  AuthController _auth = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +39,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           TextButton(
             onPressed: () {
-              register();
+              _auth.registerWithEmailPassword({
+                "name": _nameCtrl.text,
+                "email": _emailCtrl.text,
+                "password": _passwordCtrl.text,
+                "mobile": _mobileCtrl.text
+              });
             },
             child: Text("Register"),
           ),

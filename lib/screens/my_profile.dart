@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:todoapp/controllers/auth.dart';
+import 'package:todoapp/controllers/profile.dart';
 import 'package:todoapp/screens/home.dart';
 import 'package:todoapp/screens/login.dart';
 
@@ -20,15 +22,11 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen> {
   var userObj = {};
   var _imageURL = "https://picsum.photos/200/300";
+  ProfileController _profileCtrl = Get.put(ProfileController());
+  AuthController _authCtrl = AuthController();
   TextEditingController _nameCtrl = TextEditingController();
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _mobileCtrl = TextEditingController();
-
-  void logout() {
-    FirebaseAuth.instance.signOut().then((value) {
-      Get.offAll(LoginScreen());
-    });
-  }
 
   var _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   Random _rnd = Random();
@@ -54,17 +52,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     });
   }
 
-  updateProfile() {
-    FirebaseFirestore.instance
-        .collection("accounts")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .update({
-      "displayName": _nameCtrl.text,
-      "mobile": _mobileCtrl.text,
-      "email": _emailCtrl.text
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -86,10 +73,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       setState(() {
         _imageURL = uploadedURL;
       });
-      FirebaseFirestore.instance
-          .collection("accounts")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({"imageURL": _imageURL});
+      _profileCtrl.updateProfile({"imageURL": _imageURL});
     }
   }
 
@@ -119,13 +103,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           ),
           TextButton(
             onPressed: () {
-              updateProfile();
+              _profileCtrl.updateProfile({
+                "displayName": _nameCtrl.text,
+                "mobile": _mobileCtrl.text,
+                "email": _emailCtrl.text
+              });
             },
             child: Text("update profile"),
           ),
           TextButton(
             onPressed: () {
-              logout();
+              _authCtrl.logout();
             },
             child: Text("logout"),
           ),
