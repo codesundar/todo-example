@@ -18,6 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.1
+  google_sign_in: ^5.3.1
   http: ^0.13.4
   image_picker: ^0.8.5+3
 
