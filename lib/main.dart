@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapp/providers/counter.dart';
+import 'package:todoapp/providers/todo.dart';
+import 'package:todoapp/screens/counter_provider.dart';
 import 'package:todoapp/screens/home.dart';
+import 'package:todoapp/screens/provider_example/task_list.dart';
 import 'package:todoapp/screens/validate.dart';
 import 'package:todoapp/styles/theme-data.dart';
 
@@ -34,11 +39,27 @@ class MyApp extends StatelessWidget {
     //         : ThemeMode.light,
     //     home: HomeScreen(),
     //   ),
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: CustomThemeData().lightTheme,
-      darkTheme: CustomThemeData().darkTheme,
-      home: ValidateScreen(),
+    // return GetMaterialApp(
+    //   title: 'Flutter Demo',
+    //   theme: CustomThemeData().lightTheme,
+    //   darkTheme: CustomThemeData().darkTheme,
+    //   home: ValidateScreen(),
+    // );
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => CounterProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => TodoProvider(),
+        )
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: CustomThemeData().lightTheme,
+        darkTheme: CustomThemeData().darkTheme,
+        home: TaskListScreenProvider(),
+      ),
     );
   }
 }

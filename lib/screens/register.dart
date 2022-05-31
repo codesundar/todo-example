@@ -1,9 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import 'package:todoapp/controllers/auth.dart';
-import 'package:todoapp/screens/home.dart';
+import 'package:form_validator/form_validator.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -13,42 +9,53 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  TextEditingController _nameCtrl = TextEditingController();
-  TextEditingController _emailCtrl = TextEditingController();
-  TextEditingController _passwordCtrl = TextEditingController();
-  TextEditingController _mobileCtrl = TextEditingController();
-  AuthController _auth = Get.put(AuthController());
+  final TextEditingController _nameCtrl = TextEditingController();
+  final TextEditingController _emailCtrl = TextEditingController();
+  final TextEditingController _passwordCtrl = TextEditingController();
+  final TextEditingController _mobileCtrl = TextEditingController();
+  // final AuthController _auth = Get.put(AuthController());
+  final GlobalKey<FormState> _form = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          TextField(
-            controller: _nameCtrl,
-          ),
-          TextField(
-            controller: _emailCtrl,
-          ),
-          TextField(
-            controller: _passwordCtrl,
-          ),
-          TextField(
-            controller: _mobileCtrl,
-          ),
-          TextButton(
-            onPressed: () {
-              _auth.registerWithEmailPassword({
-                "name": _nameCtrl.text,
-                "email": _emailCtrl.text,
-                "password": _passwordCtrl.text,
-                "mobile": _mobileCtrl.text
-              });
-            },
-            child: Text("Register"),
-          ),
-        ],
+      body: Form(
+        key: _form,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _nameCtrl,
+              validator: ValidationBuilder().minLength(5).build(),
+            ),
+            TextFormField(
+              controller: _emailCtrl,
+              validator: ValidationBuilder().email().minLength(5).build(),
+            ),
+            TextFormField(
+              controller: _passwordCtrl,
+              validator: ValidationBuilder().minLength(6).build(),
+            ),
+            TextFormField(
+              controller: _mobileCtrl,
+              validator: ValidationBuilder().phone().build(),
+            ),
+            TextButton(
+              onPressed: () {
+                if (_form.currentState!.validate()) {
+                  print("Submit");
+                  // _auth.registerWithEmailPassword({
+                  //   "name": _nameCtrl.text,
+                  //   "email": _emailCtrl.text,
+                  //   "password": _passwordCtrl.text,
+                  //   "mobile": _mobileCtrl.text
+                  // });
+                }
+              },
+              child: const Text("Register"),
+            ),
+          ],
+        ),
       ),
     );
   }
