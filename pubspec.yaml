@@ -17,6 +17,8 @@ dependencies:
   firebase_storage: ^10.2.15
   flutter:
     sdk: flutter
+  flutter_inappwebview: ^5.4.3+7
+  flutter_secure_storage: ^5.0.2
   form_validator: ^1.0.2
   get: ^4.6.1
   google_sign_in: ^5.3.1

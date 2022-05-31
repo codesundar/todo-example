@@ -5,6 +5,7 @@ import 'package:todoapp/providers/counter.dart';
 import 'package:todoapp/providers/todo.dart';
 import 'package:todoapp/screens/counter_provider.dart';
 import 'package:todoapp/screens/home.dart';
+import 'package:todoapp/screens/msl/msl_example.dart';
 import 'package:todoapp/screens/provider_example/task_list.dart';
 import 'package:todoapp/screens/validate.dart';
 import 'package:todoapp/styles/theme-data.dart';
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: CustomThemeData().lightTheme,
         darkTheme: CustomThemeData().darkTheme,
-        home: TaskListScreenProvider(),
+        home: MicrosoftLoginExample(),
       ),
     );
   }
